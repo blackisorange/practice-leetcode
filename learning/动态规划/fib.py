@@ -57,20 +57,41 @@ def fib_04(n):
     return cur
 
 
-class Solution:
+# 递归
+class Solution1:
     def fib(self, n: int) -> int:
-        mem = [0, 1]
-        for x in range(2, n + 1):
-            mem.append(-1)
         if n == 0 or n == 1:
             return n
         else:
             return self.fib(n - 1) + self.fib(n - 2)
 
 
+# dp数组的迭代
+class Solution2:
+    def fib(self, n: int) -> int:
+        dp = [0, 1]
+        for x in range(2, n + 1):
+            dp.append(dp[x - 1] + dp[x - 2])
+        return dp[n]
+
+
+# 状态压缩
+class Solution3:
+    def fib(self, n: int) -> int:
+        pre = 0
+        now = 1
+        if n == 0 or n == 1:
+            return n
+        for x in range(2, n + 1):
+            sum = pre + now
+            pre = now
+            now = sum
+        return now
+
+
 if __name__ == '__main__':
     # range(start, stop[, step]) , 左闭右开
-    c = Solution()
+    c = Solution1()
     for i in range(10):
         # print('fib({})的值是{:^5d}'.format(i, fib_01(i)))
         # print('fib({})的值是{:^5d}'.format(i, fib_02(i)))
