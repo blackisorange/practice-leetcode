@@ -79,7 +79,7 @@ def get_amount03(amount, coins):
             if sub < 0:
                 continue
             dp[i] = min(dp[i], dp[sub] + 1)
-    if dp[i] == amount+1:
+    if dp[i] == amount + 1:
         return -1
     else:
         return dp[i]
@@ -143,7 +143,7 @@ class Solution3:
         for _ in range(1, amount + 1):
             dp.append(10000)
 
-        for x in range(amount+1):
+        for x in range(amount + 1):
             for y in coins:
                 sub = x - y
                 if sub < 0:
