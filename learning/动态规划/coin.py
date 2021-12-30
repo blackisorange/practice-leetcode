@@ -13,6 +13,7 @@
 # 1.列出子问题，在子问题中选择最优解然后加一
 # 时间复杂度O(n**k)
 from datetime import datetime
+from typing import List
 
 
 def get_amount01(amount, co):
@@ -28,7 +29,10 @@ def get_amount01(amount, co):
             if subproblem == -1:
                 continue
             res = min(res, subproblem + 1)
-        return res
+        if res == 10000:
+            return -1
+        else:
+            return res
 
 
 # 2.带备忘录的递归
@@ -56,7 +60,10 @@ def dp(amount, coins, mem):
             continue
         res = min(res, subproblem + 1)
     mem[amount] = res
-    return res
+    if res == 10000:
+        return -1
+    else:
+        return res
 
 
 # 3.dp数组的迭代解法
@@ -72,16 +79,90 @@ def get_amount03(amount, coins):
             if sub < 0:
                 continue
             dp[i] = min(dp[i], dp[sub] + 1)
-    return dp[amount]
+    if dp[i] == amount+1:
+        return -1
+    else:
+        return dp[i]
+
+
+# leetcode
+# 暴力解法
+class Solution1:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        if amount < 0:
+            return -1
+        elif amount == 0:
+            return 0
+        res = 10000
+        for x in coins:
+            sub = self.coinChange(coins, amount - x)
+            if sub == -1:
+                continue
+            else:
+                res = min(res, sub + 1)
+        if res == 10000:
+            return -1
+        else:
+            return res
+
+
+# 带备忘录的递归
+class Solution2:
+    def coinChange(self, coins, amount):
+        mem = []
+        for _ in range(amount + 1):
+            mem.append(-2)
+        return self.helper(coins, amount, mem)
+
+    def helper(self, coins, amount, mem):
+        if amount < 0:
+            return -1
+        elif amount == 0:
+            return 0
+        if mem[amount] != -2:
+            return mem[amount]
+        res = 10000
+        for x in coins:
+            sub = self.helper(coins, amount - x, mem)
+            if sub == -1:
+                continue
+            res = min(res, sub + 1)
+        if res != 10000:
+            mem[amount] = res
+        else:
+            mem[amount] = -1
+        return mem[amount]
+
+
+# dp数组的迭代
+class Solution3:
+    def coinChange(self, coins, amount):
+        if amount < 0:
+            return 0
+        dp = [0]
+        for _ in range(1, amount + 1):
+            dp.append(10000)
+
+        for x in range(amount+1):
+            for y in coins:
+                sub = x - y
+                if sub < 0:
+                    continue
+                dp[x] = min(dp[x], dp[sub] + 1)
+        if dp[amount] == 10000:
+            return -1
+        else:
+            return dp[amount]
 
 
 if __name__ == '__main__':
-    coins = [1, 2, 3, 5]
-    # print(get_amount02(0, coins))
-    s = datetime.now()
+    coins = [2]
+    s = Solution3()
+    # start = datetime.now()
     for x in range(19):
         # print('凑出{}需要最少{}枚硬币'.format(x, get_amount01(x, coins)))
         # print('凑出{}需要最少{}枚硬币'.format(x, get_amount02(x, coins)))
-        print('凑出{}需要最少{}枚硬币'.format(x, get_amount03(x, coins)))
-    total = datetime.now() - s
-    print('花费了{:.2f}ms'.format(total.microseconds))
+        # print('凑出{}需要最少{}枚硬币'.format(x, get_amount03(x, coins)))
+        print('凑出{}需要最少{}枚硬币'.format(x, s.coinChange(coins, x)))
+    # total = datetime.now() - start
+    # print('花费了{:.2f}ms'.format(total.microseconds))
