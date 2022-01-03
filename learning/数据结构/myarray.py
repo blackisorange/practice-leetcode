@@ -38,7 +38,8 @@ class Myarray:
             return self._data.insert(index, value)
 
     def print_all(self):
-        print(self._data)
+        for x in self._data:
+            print(x)
 
 
 if __name__ == '__main__':
@@ -54,4 +55,5 @@ if __name__ == '__main__':
     assert arr.delete(4) is True
     arr.delete(0)
     arr.print_all()
+
 
