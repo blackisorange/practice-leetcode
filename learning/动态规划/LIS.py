@@ -1,5 +1,5 @@
 from typing import List
-
+# 最长递增子序列（Longest Increasing Subsequence)
 
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
